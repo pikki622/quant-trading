@@ -137,10 +137,10 @@ def candlestick(df,ax=None,highlight=None,titlename='',
     #bar width
     #use 0.6 by default
     dif=[(-3+i)/10 for i in range(7)]
-    
+
     if not ax:
         ax=plt.figure(figsize=(10,5)).add_subplot(111)
-    
+
     #construct the bars one by one
     for i in range(len(df)):
         
@@ -151,10 +151,10 @@ def candlestick(df,ax=None,highlight=None,titlename='',
         y2=[df[closecol].iloc[i]]*7
 
         barcolor=colorup if y1[0]>y2[0] else colordown
-        
+
         #no high line plot if open/close is high
         if df[highcol].iloc[i]!=max(df[opencol].iloc[i],df[closecol].iloc[i]):
-            
+
             #use generic plot to viz high and low
             #use 1.001 as a scaling factor
             #to prevent high line from crossing into the bar
@@ -162,25 +162,24 @@ def candlestick(df,ax=None,highlight=None,titlename='',
                      [df[highcol].iloc[i],
                       max(df[opencol].iloc[i],
                           df[closecol].iloc[i])*1.001],c='k',**kwargs)
-    
+
         #same as high
         if df[lowcol].iloc[i]!=min(df[opencol].iloc[i],df[closecol].iloc[i]):             
-            
+
             plt.plot([i,i],
                      [df[lowcol].iloc[i],
                       min(df[opencol].iloc[i],
                           df[closecol].iloc[i])*0.999],c='k',**kwargs)
-        
+
         #treat the bar as fill between
         plt.fill_between(x,y1,y2,
                          edgecolor='k',
                          facecolor=barcolor,**kwargs)
-        
-        if highlight:
-            if df[highlight].iloc[i]==-1:
-                plt.fill_between(x,y1,y2,
-                         edgecolor='k',
-                         facecolor=highlightcolor,**kwargs)
+
+        if highlight and df[highlight].iloc[i] == -1:
+            plt.fill_between(x,y1,y2,
+                     edgecolor='k',
+                     facecolor=highlightcolor,**kwargs)
 
     #only show 5 xticks
     plt.xticks([])
